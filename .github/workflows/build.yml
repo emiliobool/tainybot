@@ -4,19 +4,19 @@ on:
   push:
     branches: [main]
     paths-ignore:
-      - "**.md"
-      - "**.spec.js"
-      - ".idea"
-      - ".vscode"
-      - ".dockerignore"
-      - "Dockerfile"
-      - ".gitignore"
-      - ".github/**"
-      - "!.github/workflows/build.yml"
+      - '**.md'
+      - '**.spec.js'
+      - '.idea'
+      - '.vscode'
+      - '.dockerignore'
+      - 'Dockerfile'
+      - '.gitignore'
+      - '.github/**'
+      - '!.github/workflows/build.yml'
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Checkout Code
@@ -27,20 +27,15 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Wine
-        run: |
-          sudo dpkg --add-architecture i386
-          sudo apt-get update
-          sudo apt-get install --no-install-recommends -y wine-stable wine32
-
       - name: Install dependencies
         run: npm install
 
       - name: Save PFX file
         env:
           CERT_PFX: ${{ secrets.CERT_PFX }}
+        shell: powershell
         run: |
-          echo "${CERT_PFX}" | base64 -d > certificate.pfx
+          [System.Convert]::FromBase64String("${env:CERT_PFX}") | Set-Content certificate.pfx -Encoding Byte
 
       - name: Build Release Files
         run: npm run build
