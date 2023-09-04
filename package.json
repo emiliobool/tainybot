@@ -40,7 +40,7 @@
     "@tailwindcss/forms": "^0.5.3",
     "@twitchapis/twitch.js": "^2.0.0-beta.0",
     "@twurple/api": "^6.0.6",
-    "@twurple/auth": "^6.0.6",
+    "@twurple/auth": "^7.0.1",
     "@twurple/chat": "^6.0.6",
     "@twurple/eventsub-ws": "^6.0.6",
     "axios": "^1.3.4",
