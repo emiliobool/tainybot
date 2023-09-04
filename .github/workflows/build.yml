@@ -38,15 +38,8 @@ jobs:
           [System.Convert]::FromBase64String("${env:CERT_PFX}") | Set-Content certificate.pfx -Encoding Byte
 
       - name: Build Release Files
-        run: npm run build
+        run: npm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
           CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
-
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: release_on_windows
-          path: release/
-          retention-days: 5
