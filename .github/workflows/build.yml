@@ -16,11 +16,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [macos-latest, ubuntu-latest, windows-latest]
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout Code
@@ -31,17 +27,30 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install Dependencies
-        run: npm install
+      - name: Install Wine
+        run: |
+          sudo dpkg --add-architecture i386
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends -y wine-stable wine32
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Save PFX file
+        env:
+          CERT_PFX: ${{ secrets.CERT_PFX }}
+        run: |
+          echo "${CERT_PFX}" | base64 -d > certificate.pfx
 
       - name: Build Release Files
         run: npm run build
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: release_on_${{ matrix. os }}
+          name: release_on_windows
           path: release/
           retention-days: 5
