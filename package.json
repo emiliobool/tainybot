@@ -1,0 +1,58 @@
+{
+  "name": "tainybot",
+  "version": "0.1.15-dev",
+  "main": "dist-electron/main/index.js",
+  "description": "GPT powered chatbot for twitch.",
+  "author": "Emilio Bool <contact@emiliobool.com>",
+  "private": true,
+  "debug": {
+    "env": {
+      "VITE_DEV_SERVER_URL": "http://127.0.0.1:3344/"
+    }
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && electron-builder",
+    "build-windows": "vite build && electron-builder build --windows",
+    "build-ts": "vue-tsc --noEmit && vite build && electron-builder",
+    "publish": "vite build && electron-builder build --windows --publish always",
+    "upload-latest": "node upload-latest.js",
+    "preview": "vite preview",
+    "postinstall": "install-app-deps"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.0.0",
+    "autoprefixer": "^10.4.13",
+    "aws-sdk": "^2.1343.0",
+    "electron": "^23.2.1",
+    "electron-builder": "^23.6.0",
+    "postcss": "^8.4.21",
+    "typescript": "^5.0.3",
+    "vite": "^4.1.4",
+    "vite-plugin-electron": "^0.11.1",
+    "vite-plugin-electron-renderer": "^0.12.1",
+    "vue": "^3.2.47",
+    "vue-tsc": "^1.1.7"
+  },
+  "dependencies": {
+    "@headlessui/vue": "^1.7.12",
+    "@heroicons/vue": "^2.0.17",
+    "@tailwindcss/forms": "^0.5.3",
+    "@twitchapis/twitch.js": "^2.0.0-beta.0",
+    "@twurple/api": "^6.0.6",
+    "@twurple/auth": "^6.0.6",
+    "@twurple/chat": "^6.0.6",
+    "@twurple/eventsub-ws": "^6.0.6",
+    "axios": "^1.3.4",
+    "electron-log": "^4.4.8",
+    "electron-updater": "^5.3.0",
+    "luxon": "^3.3.0",
+    "node-fetch": "^3.3.1",
+    "nunjucks": "^3.2.3",
+    "openai": "^3.2.1",
+    "pinia": "^2.0.33",
+    "sqlite3": "^5.1.4",
+    "tailwindcss": "^3.2.7",
+    "tmi.js": "1.9.0-pre.1"
+  }
+}

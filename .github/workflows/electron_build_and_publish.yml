@@ -1,0 +1,61 @@
+name: Electron Build and Publish
+
+on:
+  push:
+    branches: [master]
+    # tags:
+    #   - 'v*'
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      with:
+        node-version: '16.x'
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v2
+      with:
+        node-version: '16.x'
+    - name: Install Wine
+      run: |
+        sudo dpkg --add-architecture i386
+        sudo apt-get update
+        sudo apt-get install --no-install-recommends -y wine-stable wine32
+
+    - name: Install dependencies
+      run: npm ci
+
+    - name: Save PFX file
+      env:
+        CERT_PFX: ${{ secrets.CERT_PFX }}
+      run: |
+        echo "${CERT_PFX}" | base64 -d > certificate.pfx
+
+    - name: Build and publish the app
+      run: npm run publish
+      env:
+        CERT_PASSWORD: ${{ secrets.CERT_PASSWORD }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+        AWS_S3_ENDPOINT: https://625ef4db30d8f18f263989f279265ef1.r2.cloudflarestorage.com
+
+    - name: Create latest.zip
+      run: |
+        version=$(grep version package.json | sed 's/.*"\(.*\)".*/\1/')
+        platform=win
+        artifact="release/$version/tainybot_$version.$([[ $platform == "win" ]] && echo "exe" || echo "AppImage")"
+        echo "Creating latest.zip from $artifact"
+        sudo apt-get install -y zip
+        zip -j release/latest.zip $artifact
+
+    - name: Upload latest file to S3
+      run: npm run upload-latest
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.CLOUDFLARE_R2_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.CLOUDFLARE_R2_SECRET_ACCESS_KEY }}
+        AWS_S3_ENDPOINT: https://625ef4db30d8f18f263989f279265ef1.r2.cloudflarestorage.com
+
