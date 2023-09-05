@@ -39,9 +39,8 @@ jobs:
       - name: Save PFX file
         env:
           CERT_PFX: ${{ secrets.CERT_PFX }}
-        shell: powershell
         run: |
-          [System.Convert]::FromBase64String("${env:CERT_PFX}") | Set-Content certificate.pfx -Encoding Byte
+          echo "${CERT_PFX}" | base64 -d > certificate.pfx
 
       - name: Build Release Files
         run: npm run publish
