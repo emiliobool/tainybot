@@ -1,4 +1,3 @@
-import { EventEmitter } from 'node:events';
 import { app, BrowserWindow, shell, ipcMain, Menu } from 'electron'
 import { release } from 'node:os'
 import { join } from 'node:path'
@@ -89,14 +88,14 @@ async function createWindow() {
   const contextMenu = createContextMenu();
 
   win.webContents.on('context-menu', (e, params) => {
-    contextMenu.popup(win, params.x, params.y);
+    contextMenu.popup({window: win, x: params.x, y: params.y});
   });
 
 }
 
 
 function createContextMenu() {
-  const template = [
+  const template: Electron.MenuItemConstructorOptions[] = [
     { role: 'undo' },
     { role: 'redo' },
     { type: 'separator' },
@@ -110,7 +109,6 @@ function createContextMenu() {
   const menu = Menu.buildFromTemplate(template);
   return menu;
 }
-
 
 autoUpdater.logger = log;
 autoUpdater.logger["transports"].file.level = 'info';
