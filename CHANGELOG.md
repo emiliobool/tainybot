@@ -1,3 +1,10 @@
+## [0.1.16] - 2023-10-06
+### Fixed
+- Edit menu
+
+### Improved
+- Show used tokens in context
+
 ## [0.1.14] - 2023-04-09
 ### Added
 - Write output to file

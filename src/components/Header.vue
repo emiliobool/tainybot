@@ -39,7 +39,7 @@ const tokens = computed(() => {
 <template>
   <div class="text-tertiary p-3 flex items-center justify-between" :class="{
     'bg-green-500': app.connected,
-    'bg-slate-500': !app.connected,
+    'bg-slate-600': !app.connected,
     'text-slate-500': !app.connected,
     'text-green-900': app.connected,
   }">

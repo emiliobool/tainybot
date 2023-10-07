@@ -5,6 +5,7 @@ import * as ui from './ui'
 import { autoUpdater } from 'electron-updater'
 import log from 'electron-log';
 import { customLog } from './customLog'
+import { Dialog } from '@headlessui/vue'
 
 
 process.on('uncaughtException', (error) => {
@@ -110,6 +111,9 @@ function createContextMenu() {
   return menu;
 }
 
+
+
+
 autoUpdater.logger = log;
 autoUpdater.logger["transports"].file.level = 'info';
 
@@ -170,7 +174,23 @@ autoUpdater.on('download-progress', (progressObj) => {
 customLog('info', 'App starting...');
 
 
-let template = []
+let template: Electron.MenuItemConstructorOptions[] = [
+  {
+    label: 'Edit',
+    submenu: [
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteAndMatchStyle' },
+      { role: 'delete' },
+      { role: 'selectAll' }
+    ]
+  }
+
+]
 if (process.platform === 'darwin') {
   // OS X
   const name = app.getName();
@@ -179,13 +199,13 @@ if (process.platform === 'darwin') {
     submenu: [
       {
         label: `About ${name} ${app.getVersion()}`,
-        role: 'about'
+        role: 'about',
       },
       {
         label: 'Quit',
         accelerator: 'Command+Q',
         click() { app.quit(); }
-      },
+      }
     ]
   })
 }
