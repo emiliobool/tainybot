@@ -1,6 +1,6 @@
 {
   "name": "tainybot",
-  "version": "0.1.16-dev",
+  "version": "0.1.16",
   "main": "dist-electron/main/index.js",
   "description": "GPT powered chatbot for twitch.",
   "author": "Emilio Bool <contact@emiliobool.com>",
