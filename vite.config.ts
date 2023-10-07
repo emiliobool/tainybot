@@ -5,7 +5,7 @@ import electron from 'vite-plugin-electron'
 import renderer from 'vite-plugin-electron-renderer'
 import pkg from './package.json'
 import wasm from "vite-plugin-wasm";
-
+import topLevelAwait from "vite-plugin-top-level-await";
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
   rmSync('dist-electron', { recursive: true, force: true })
@@ -18,6 +18,7 @@ export default defineConfig(({ command }) => {
     plugins: [
       wasm(),
       vue(),
+      topLevelAwait(),
       electron([
         {
           // Main-Process entry file of the Electron App.
